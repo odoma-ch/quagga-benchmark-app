@@ -1038,41 +1038,10 @@ async def export_submissions_rdf(
     request: Request, user: dict = Depends(get_current_user)
 ):
     """Exports all submissions as RDF (Turtle format)."""
-    all_submissions = database.get_all_submissions()
-
-    # create the content of the rdf file in a specified format
-    # reference: https://github.com/sib-swiss/sparql-examples
-    rdf_content = """
-@prefix sh: <http://www.w3.org/ns/shacl#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix schema: <http://schema.org/> .
-@prefix qkl: <http://example.org/question-kg-linker/> .
-"""
-
-    for sub in all_submissions:
-        submission_id = sub["id"]
-        comment = (
-            "SPARQL - Natural language question pair"
-            if sub["sparql_query"]
-            else "Natural Language Question"
-        )
-
-        rdf_content += f"""qkl:{submission_id} .
-\ta sh:SPARQLExecutable, sh:SPARQLSelectExecutable ;
-\trdfs:comment "{comment}" ;
-\tsh:prefixes _:sparql_examples_prefixes ;
-"""
-
-        if sub["sparql_query"]:
-            rdf_content += f'\tsh:select """{helper_methods.escape_string(sub["sparql_query"])}""" ;\n'
-
-        rdf_content += f'\tschema:target <{sub["kg_endpoint"]}> ;\n'
-        rdf_content += (
-            f'\tqkl:nlQuestion "{helper_methods.escape_string(sub["nl_question"])}" ;\n'
-        )
-        rdf_content += ".\n\n"
-
-    return Response(content=rdf_content.encode("utf-8"), media_type="text/turtle")
+    raise HTTPException(
+        status_code=status.HTTP_410_GONE,
+        detail="Export endpoint is disabled.",
+    )
 
 
 @app.get("/home")
