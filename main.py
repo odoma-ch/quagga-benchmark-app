@@ -849,6 +849,19 @@ async def browse_submissions_for_kg(request: Request, kg_endpoint: str):
     current_month = datetime.now().strftime("%B")
     submissions = database.get_submissions_by_kg(kg_endpoint)
     kg_metadata = database.get_all_kg_metadata(for_one=True, endpoint=kg_endpoint)
+
+    # Block access when enough query pairs have been collected
+    query_pairs = sum(
+        1
+        for sub in submissions
+        if sub.get("sparql_query") and sub.get("sparql_query").strip()
+    )
+    if query_pairs >= 10:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Enough queries have been collected for this knowledge graph. Submissions are no longer available for browsing.",
+        )
+
     return templates.TemplateResponse(
         "submissions.html",
         {

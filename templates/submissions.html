@@ -1229,9 +1229,15 @@
                                         {% if kg.about_page %}
                                         <a href="{{ kg.about_page }}" target="_blank" rel="noopener noreferrer" style="color: var(--primary); text-decoration: none; display: inline-flex; align-items: center;">About ↗</a>
                                         {% endif %}
-                                        <a href="/browse/{{ kg.endpoint | urlencode }}" class="kg-view-btn" style="background: white; color: #f26558; padding: 8px 16px; border: 1px solid #f26558; border-radius: 20px; text-decoration: none; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
-                                            View Submissions
-                                        </a>
+                                        {% if kg.query_pairs >= 10 %}
+                                            <span class="kg-view-btn" style="background: #e8f5e9; color: #2e7d32; padding: 8px 16px; border: 1px solid #2e7d32; border-radius: 20px; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px;">
+                                                Enough queries collected
+                                            </span>
+                                        {% else %}
+                                            <a href="/browse/{{ kg.endpoint | urlencode }}" class="kg-view-btn" style="background: white; color: #f26558; padding: 8px 16px; border: 1px solid #f26558; border-radius: 20px; text-decoration: none; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
+                                                View Submissions
+                                            </a>
+                                        {% endif %}
                                         <span style="background-color: var(--light-gray); color: var(--dark-gray); padding: 6px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 500; display: inline-flex; align-items: center; gap: 4px;">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 50 50" fill="currentColor">
                                                 <path d="M42.651,19.995h-14.09v-8.093c0-0.965-0.785-1.75-1.75-1.75H7.114c-0.965,0-1.75,0.785-1.75,1.75v12.325
